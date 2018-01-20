@@ -1,9 +1,7 @@
 package blue.sparse.math
 
 import blue.sparse.math.matrices.Matrix4f
-import blue.sparse.math.vectors.floats.div
-import blue.sparse.math.vectors.floats.Quaternion4f
-import blue.sparse.math.vectors.floats.Vector3f
+import blue.sparse.math.vectors.floats.*
 
 data class FloatTransform(val translation: Vector3f, val rotation: Quaternion4f, val scale: Vector3f)
 {
@@ -39,6 +37,31 @@ data class FloatTransform(val translation: Vector3f, val rotation: Quaternion4f,
 	fun rotateDeg(axis: Vector3f, angle: Float): FloatTransform
 	{
 		return rotateRad(axis, Math.toRadians(angle.toDouble()).toFloat())
+	}
+
+	fun lookAt(target: Vector3f, up: Vector3f = Axis.Y.vector3)
+	{
+		setRotation(Quaternion4f.lookAt(normalize(translation - target), up))
+	}
+
+	fun lookAway(target: Vector3f, up: Vector3f = Axis.Y.vector3)
+	{
+		setRotation(Quaternion4f.lookAt(normalize(target - translation), up))
+	}
+
+	fun setTranslation(translation: Vector3f)
+	{
+		this.translation.assign(translation.x, translation.y, translation.z)
+	}
+
+	fun setScale(scale: Vector3f)
+	{
+		this.scale.assign(scale.x, scale.y, scale.z)
+	}
+
+	fun setRotation(rotation: Quaternion4f)
+	{
+		this.rotation.assign(rotation.x, rotation.y, rotation.z, rotation.w)
 	}
 
 	private fun longHashCode(): Long

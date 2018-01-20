@@ -22,18 +22,28 @@ data class Quaternion4f(var x: Float, var y: Float, var z: Float, var w: Float) 
 		assign(normalized.x * sinHalf, normalized.y * sinHalf, normalized.z * sinHalf, cosHalf)
 	}
 
-	constructor(forward: Vector3f, up: Vector3f) : this()
+	constructor(forward: Vector3f) : this()
 	{
-		val dot = dot(Vector3f(0f, 0f, 1f), forward)
+		val current = Vector3f(0f, 0f, 1f)
+		val dot = dot(current, forward)
 
-		if (abs(dot + 1) < 0)
+		if(abs(dot - (-1.0f)) < 0.000001f)
 		{
-			assign(up.x, up.y, up.z, PI.toFloat())
-		} else if (abs(dot - 1) > 0)
+			assign(0f, 1f, 0f, PI.toFloat())
+		}else if(abs(dot - (1.0f)) < 0.000001f)
 		{
+			assign(0f, 0f, 0f, 1f)
+		}else{
 			val angle = acos(dot)
-			val axis = normalize(cross(Vector3f(0f, 0f, 1f), forward))
-			rotate(axis, angle)
+			val axis = normalize(cross(current, forward))
+			if(axis.any { it.isNaN() }) axis.assign(0f, 0f, -1f)
+
+			val normalized = normalize(axis)
+			val sinHalf = sin(angle / 2f)
+			val cosHalf = cos(angle / 2f)
+
+			assign(normalized.x * sinHalf, normalized.y * sinHalf, normalized.z * sinHalf, cosHalf)
+
 		}
 	}
 
@@ -165,4 +175,57 @@ data class Quaternion4f(var x: Float, var y: Float, var z: Float, var w: Float) 
 	override fun toIntVector() = Vector4i(x.toInt(), y.toInt(), z.toInt(), w.toInt())
 
 	override fun clone() = Quaternion4f(x, y, z, w)
+
+	companion object
+	{
+		fun rotationBetweenVectors(start: Vector3f, dest: Vector3f): Quaternion4f
+		{
+			val nStart = normalize(start)
+			val nDest = normalize(dest)
+
+			val cosTheta = dot(nStart, nDest)
+
+			var rotationAxis: Vector3f
+
+//		if(cosTheta < -1 + 0.001f)
+//		{
+//			rotationAxis = cross(Vector3f(0f, 0f, 1f), nStart)
+//			if(lengthSquared(rotationAxis) < 0.01)
+//			{
+//				rotationAxis = cross(Vector3f(1f, 0f, 0f), nStart)
+//			}
+//
+//			rotationAxis = normalize(rotationAxis)
+//			return Quaternion4f(rotationAxis, PI.toFloat())
+//		}
+
+			rotationAxis = cross(nStart, nDest)
+
+			val s = sqrt((1 + cosTheta) * 2)
+			val invS = 1.0f / s
+
+			return Quaternion4f(
+					rotationAxis.x * invS,
+					rotationAxis.y * invS,
+					rotationAxis.z * invS,
+					s * 0.5f
+			)
+		}
+
+		fun lookAt(direction: Vector3f, desiredUp: Vector3f): Quaternion4f
+		{
+			if(lengthSquared(direction) < 0.0001f)
+				return Quaternion4f()
+
+			val right = cross(direction, desiredUp)
+			val correctedUp = cross(right, direction)
+
+			val rot1 = rotationBetweenVectors(Vector3f(0f, 0f, 1f), direction)
+
+			val newUp = Vector3f(0f, 1f, 0f) * rot1
+			val rot2 = rotationBetweenVectors(newUp, correctedUp)
+
+			return rot2 * rot1
+		}
+	}
 }
