@@ -9,9 +9,9 @@ data class FloatTransform(val translation: Vector3f, val rotation: Quaternion4f,
 {
 	constructor() : this(Vector3f(0f), Quaternion4f(), Vector3f(1f))
 
-	private var cachedHashCode: Long = longHashCode()
-	private var cachedMatrix: Matrix4f = computeMatrix()
-	private var cachedInverseMatrix: Matrix4f = computeInverseMatrix()
+//	private var cachedHashCode: Long = longHashCode()
+//	private var cachedMatrix: Matrix4f = computeMatrix()
+//	private var cachedInverseMatrix: Matrix4f = computeInverseMatrix()
 
 	fun reset()
 	{
@@ -51,35 +51,36 @@ data class FloatTransform(val translation: Vector3f, val rotation: Quaternion4f,
 
 	private fun computeMatrix(): Matrix4f
 	{
-		return  Matrix4f.translation(translation).rotate(rotation).scale(scale)
+		return Matrix4f.translation(translation).rotate(rotation).scale(scale)
 	}
 
 	private fun computeInverseMatrix(): Matrix4f
 	{
-		return  Matrix4f.scale(1f / scale).rotate(rotation.conjugate).translate(-translation)
+		return Matrix4f.scale(1f / scale).rotate(rotation.conjugate).translate(-translation)
 	}
 
-	private fun check()
-	{
-		val newDataHashCode = longHashCode()
-		if(newDataHashCode != cachedHashCode)
-		{
-			cachedMatrix = computeMatrix()
-			cachedInverseMatrix = computeInverseMatrix()
-		}
-	}
+//	private fun check()
+//	{
+//		val newDataHashCode = longHashCode()
+//		if(newDataHashCode != cachedHashCode)
+//		{
+//			cachedHashCode = newDataHashCode
+//			cachedMatrix = computeMatrix()
+//			cachedInverseMatrix = computeInverseMatrix()
+//		}
+//	}
 
-	val matrix: Matrix4f
-		get()
-		{
-			check()
-			return cachedMatrix.clone()
-		}
+	val matrix: Matrix4f get() = computeMatrix()
+//		get()
+//		{
+//			check()
+//			return cachedMatrix.clone()
+//		}
 
-	val inverseMatrix: Matrix4f
-		get()
-		{
-			check()
-			return cachedInverseMatrix.clone()
-		}
+	val inverseMatrix: Matrix4f get() = computeInverseMatrix()
+//		get()
+//		{
+//			check()
+//			return cachedInverseMatrix.clone()
+//		}
 }
