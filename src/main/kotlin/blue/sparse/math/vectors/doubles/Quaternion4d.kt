@@ -2,10 +2,7 @@ package blue.sparse.math.vectors.doubles
 
 import blue.sparse.math.*
 import blue.sparse.math.matrices.Matrix4d
-import blue.sparse.math.matrices.Matrix4f
-import blue.sparse.math.vectors.*
-import blue.sparse.math.vectors.floats.*
-import blue.sparse.math.vectors.ints.IntVector
+import blue.sparse.math.vectors.floats.Quaternion4f
 import blue.sparse.math.vectors.ints.Vector4i
 
 data class Quaternion4d(var x: Double, var y: Double, var z: Double, var w: Double) : DoubleVector

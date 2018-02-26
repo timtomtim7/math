@@ -1,6 +1,5 @@
 package blue.sparse.math.vectors.ints
 
-import blue.sparse.math.vectors.floats.Vector2f
 import blue.sparse.math.vectors.floats.Vector4f
 
 data class Vector4i(var x: Int, var y: Int, var z: Int, var w: Int) : IntVector

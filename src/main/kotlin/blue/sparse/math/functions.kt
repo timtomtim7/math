@@ -55,6 +55,8 @@ fun round(number: Double) = Math.round(number)
 fun clamp(number: Float, min: Float, max: Float) = Math.min(Math.max(number, min), max)
 fun clamp(number: Double, min: Double, max: Double) = Math.min(Math.max(number, min), max)
 fun clamp(number: Int, min: Int, max: Int) = Math.min(Math.max(number, min), max)
+fun clamp(number: Short, min: Short, max: Short) = Math.min(Math.max(number.toInt(), min.toInt()), max.toInt()).toShort()
+fun clamp(number: Byte, min: Byte, max: Byte) = Math.min(Math.max(number.toInt(), min.toInt()), max.toInt()).toByte()
 
 fun sqrt(number: Float) = Math.sqrt(number.toDouble()).toFloat()
 fun sqrt(number: Double) = Math.sqrt(number)
