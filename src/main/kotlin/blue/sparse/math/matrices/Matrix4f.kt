@@ -221,9 +221,9 @@ class Matrix4f : Cloneable
 			val depth = far - near
 
 			return columns(
-					Vector4f(1f / width, 0f, 0f, -(right + left) / width),
-					Vector4f(0f, 1f / height, 0f, -(top + bottom) / height),
-					Vector4f(0f, 0f, -1f / depth, -(far + near) / depth),
+					Vector4f(2f / width, 0f, 0f, -(right + left) / width),
+					Vector4f(0f, 2f / height, 0f, -(top + bottom) / height),
+					Vector4f(0f, 0f, -2f / depth, -(far + near) / depth),
 					Vector4f(0f, 0f, 0f, 1f)
 			)
 		}
