@@ -1,11 +1,8 @@
 package blue.sparse.math.matrices
 
-import blue.sparse.math.vectors.doubles.Vector4d
 import blue.sparse.math.vectors.floats.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.FloatBuffer
-import java.util.*
+import java.nio.*
+import java.util.Arrays
 
 class Matrix4f : Cloneable
 {
@@ -224,9 +221,9 @@ class Matrix4f : Cloneable
 			val depth = far - near
 
 			return columns(
-					Vector4f(2f / width, 0f, 0f, -(right + left) / width),
-					Vector4f(0f, 2f / height, 0f, -(top + bottom) / height),
-					Vector4f(0f, 0f, -2f / depth, -(far + near) / depth),
+					Vector4f(1f / width, 0f, 0f, -(right + left) / width),
+					Vector4f(0f, 1f / height, 0f, -(top + bottom) / height),
+					Vector4f(0f, 0f, -1f / depth, -(far + near) / depth),
 					Vector4f(0f, 0f, 0f, 1f)
 			)
 		}

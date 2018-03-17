@@ -19,6 +19,16 @@ fun Int.vectorFromIntARGB(): Vector4f
 	return Vector4f(r.toFloat(), g.toFloat(), b.toFloat(), a.toFloat()) / 255.0f
 }
 
+fun Int.vectorFromIntRGBA(): Vector4f
+{
+	val r = (this shr 24) and 0xFF
+	val g = (this shr 16) and 0xFF
+	val b = (this shr 8) and 0xFF
+	val a = (this) and 0xFF
+
+	return Vector4f(r.toFloat(), g.toFloat(), b.toFloat(), a.toFloat()) / 255.0f
+}
+
 fun Vector3f.toIntRGB(): Int
 {
 	val vectorRGB = round(clamp(this, 0f, 1f) * 255f)
@@ -29,6 +39,12 @@ fun Vector4f.toIntARGB(): Int
 {
 	val vectorRGB = round(clamp(this, 0f, 1f) * 255f)
 	return (vectorRGB.w.toInt() shl 24) or (vectorRGB.x.toInt() shl 16) or (vectorRGB.y.toInt() shl 8) or vectorRGB.z.toInt()
+}
+
+fun Vector4f.toIntRGBA(): Int
+{
+	val vectorRGB = round(clamp(this, 0f, 1f) * 255f)
+	return (vectorRGB.w.toInt()) or (vectorRGB.x.toInt() shl 24) or (vectorRGB.y.toInt() shl 16) or (vectorRGB.z.toInt() shl 8)
 }
 
 //fun Vector3f.withAlpha(number: Number) = Vector4f(this, number)
